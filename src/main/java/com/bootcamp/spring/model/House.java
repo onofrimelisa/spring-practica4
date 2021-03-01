@@ -3,6 +3,7 @@ package com.bootcamp.spring.model;
 import com.bootcamp.spring.dto.RoomDTO;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.OptionalDouble;
 
@@ -63,10 +64,10 @@ public class House {
     
     public Double calculateSquareMeters() {
         return this.rooms
-                .stream()
-                .mapToDouble(room ->(room.getSquareMeters() + room.getSquareMeters()))
-                .reduce(Double::sum)
-                .orElse(0);
+            .stream()
+            .mapToDouble(room ->(room.getSquareMeters() + room.getSquareMeters()))
+            .reduce(Double::sum)
+            .orElse(0);
     }
 
     public Double calculateCost() {
@@ -75,18 +76,9 @@ public class House {
     }
 
     public Room getBiggestRoom() {
-        Room biggestRoom = null;
-        Double max = new Double(0d);
-
-        for (Room room :
-                this.getRooms()) {
-            Double squareMeters = room.getSquareMeters();
-            if (squareMeters > max) {
-                max = squareMeters;
-                biggestRoom = room;
-            }
-        }
-
-        return  biggestRoom;
+        return Collections.max(
+            this.rooms,
+            (room1, room2) -> room1.getSquareMeters().compareTo(room2.getSquareMeters())
+        );
     }
 }
